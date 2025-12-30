@@ -1,0 +1,13 @@
+Feature
+What to Change
+Why?
+Handshake
+Update the hello JSON to include out_sample_rate: 24000.
+Hardware Match: The S3-BOX speaker runs at 24kHz, while the mic runs at 16kHz. If you don't specify this, the audio sounds like "chipmunks" or fails to play.
+Binary Header
+Use struct.unpack('>BBH', ...) to peel the first 4 bytes.
+Frame Identification: The ESP32 wraps every audio packet in a "container" (Header). If you don't strip it, the Opus decoder sees "trash" and crashes.
+Frame Size
+Set mic decoding to 960 samples and speaker encoding to 1440 samples.
+Latency Sync: Both use 60ms intervals. 16kHz × 0.06s = 960. 24kHz × 0.06s = 1440. If these don't match, the audio stutters.
+
